@@ -2,11 +2,13 @@ import Router from 'router';
 import queryString from 'query-string';
 import Action from 'action-js';
 import parseUrl from 'parseurl';
+import ApiError from './helper/api-error';
+import { NewFileModel } from './model/drive-models';
 import GetProximityDrives from './usecase/get-proximity-drives';
 import GetNearbyDrives from './usecase/get-nearby-drives';
-import ApiError from './helper/api-error';
+import CreateFile from './usecase/create-file';
+import GetFileById from './usecase/get-file-by-id';
 import FindNodeByNodeId from './usecase/find-node-by-node-id';
-import { NewFileModel } from './model/drive-models';
 
 const app = Router({
   mergeParams: true,
@@ -21,14 +23,21 @@ function extractToken(authorization) {
 }
 
 function mimikInject(context, req) {
+  console.log(`mimikInject context ==> ${context}`);
+  console.log(`mimikInject JSON.stringify(context) ==> ${JSON.stringify(context)}`);
+  console.log(`mimikInject req ==> ${req}`);
+  console.log(`mimikInject JSON.stringify(req) ==> ${JSON.stringify(req)}`);
   const { uMDS } = context.env;
   const edge = context.edge;
   const http = context.http;
   const authorization = req.authorization;
+  const storage = context.storage;
   parseUrl(req);
 
   const getNearByDrives = new GetNearbyDrives(uMDS, http, authorization, edge);
   const getProximityDrives = new GetProximityDrives(uMDS, http, authorization, edge);
+  const createFile = new CreateFile(storage);
+  const getFileById = new GetFileById(storage);
 
   const findNode = new FindNodeByNodeId(getNearByDrives, getProximityDrives);
 
@@ -36,6 +45,8 @@ function mimikInject(context, req) {
     ...context,
     getNearByDrives,
     getProximityDrives,
+    createFile,
+    getFileById,
     findNode,
   });
 }
@@ -154,10 +165,11 @@ app.get('/bep', (req, res) => {
 
 app.get('/model', (req, res) => {
   const fileId = 'imagemodel.zip';
+  const { getFileById } = req.mimikContext;
 
   const query = queryString.parse(req._parsedUrl.query);
 
-  let action = req.injector.getFileByIdInstance(fileId).buildAction();
+  let action = getFileById.buildAction(fileId);
   if (query.alt === 'media') {
     action = action.next(file => res.writeMimeFile(file.path, file.mimeType));
   } else {
@@ -172,9 +184,9 @@ app.get('/model', (req, res) => {
 });
 
 app.post('/model', (req, res) => {
-  let metadataBuf = '';
   const file = {};
   const id = 'imagemodel.zip';
+  const { createFile } = req.mimikContext;
 
   const authorization = req.authorization;
   const authKey = req.mimikContext.env.AUTHORIZATION_KEY;
@@ -200,11 +212,7 @@ app.post('/model', (req, res) => {
           action: 'skip',
         };
 
-        if (key === 'metadata') {
-          todo = {
-            action: 'get',
-          };
-        } else if (key === 'file') {
+        if (key === 'file') {
           file.filename = filename;
           todo = {
             action: 'store',
@@ -214,9 +222,6 @@ app.post('/model', (req, res) => {
 
         return todo;
       },
-      get: (key, value) => {
-        metadataBuf = metadataBuf.concat(value);
-      },
       store: (filepath, filesize) => {
         file.path = id;
         file.size = filesize;
@@ -224,14 +229,8 @@ app.post('/model', (req, res) => {
     });
   }
 
-  const metadata = NewFileModel.validate(metadataBuf, id);
-  if (!metadata) {
-    res.writeError(new ApiError(400, 'invalid metadata'));
-    return;
-  }
-
-  req.injector.createFileInstance(metadata, file)
-    .buildAction()
+  createFile
+    .buildAction(metadata, file)
     .next(fileModel => toJson(fileModel))
     .next(json => res.end(json))
     .guard(e => res.writeError(new ApiError(400, e.message)))
