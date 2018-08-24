@@ -164,14 +164,17 @@ app.get('/bep', (req, res) => {
 });
 
 app.get('/model', (req, res) => {
-  const fileId = 'imagemodel.zip';
+  const fileId = 'imagemodel.tar';
   const { getFileById } = req.mimikContext;
 
   const query = queryString.parse(req._parsedUrl.query);
 
   let action = getFileById.buildAction(fileId);
   if (query.alt === 'media') {
-    action = action.next(file => res.writeMimeFile(file.path, file.mimeType));
+    action = action.next((file) => {
+      console.log(`get media filepath ${file.path}`);
+      res.writeMimeFile(file.path, file.mimeType);
+    });
   } else {
     action = action
       .next(fileModel => toJson(fileModel))
@@ -184,8 +187,10 @@ app.get('/model', (req, res) => {
 });
 
 app.post('/model', (req, res) => {
+  let metadataBuf = '';
+  const id = 'imagemodel.tar';
   const file = {};
-  const id = 'imagemodel.zip';
+
   const { createFile } = req.mimikContext;
 
   const authorization = req.authorization;
@@ -212,7 +217,11 @@ app.post('/model', (req, res) => {
           action: 'skip',
         };
 
-        if (key === 'file') {
+        if (key === 'metadata') {
+          todo = {
+            action: 'get',
+          };
+        } else if (key === 'file') {
           file.filename = filename;
           todo = {
             action: 'store',
@@ -222,11 +231,20 @@ app.post('/model', (req, res) => {
 
         return todo;
       },
+      get: (key, value) => {
+        metadataBuf = metadataBuf.concat(value);
+      },
       store: (filepath, filesize) => {
         file.path = id;
         file.size = filesize;
       },
     });
+  }
+
+  const metadata = NewFileModel.validate(metadataBuf, id);
+  if (!metadata) {
+    res.writeError(new ApiError(400, 'invalid metadata'));
+    return;
   }
 
   createFile
@@ -238,7 +256,7 @@ app.post('/model', (req, res) => {
 });
 
 app.delete('/model', (req, res) => {
-  const fileId = 'imagemodel.zip';
+  const fileId = 'imagemodel.tar';
   const { storage } = req.mimikContext;
   const authorization = req.authorization;
   const authKey = req.mimikContext.env.AUTHORIZATION_KEY;
