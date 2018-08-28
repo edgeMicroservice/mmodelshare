@@ -10,13 +10,9 @@ export default class CreateFile {
       const { storage } = this;
       const localmetadata = metadata;
 
-      localmetadata.path = ((metadata.contentHints && metadata.contentHints.softLink) ||
-        file.path);
+      localmetadata.path = file.path;
 
-      localmetadata.size = ((metadata.contentHints && metadata.contentHints.size) ||
-        file.size);
-
-      localmetadata.contentHints = undefined;
+      localmetadata.size = file.size;
 
       try {
         const json = JSON.stringify(localmetadata);

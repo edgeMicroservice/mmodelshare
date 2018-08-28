@@ -164,7 +164,7 @@ app.get('/bep', (req, res) => {
 });
 
 app.get('/model', (req, res) => {
-  const fileId = 'imagemodel.tar';
+  const fileId = 'imagemodel.zip';
   const { getFileById } = req.mimikContext;
 
   const query = queryString.parse(req._parsedUrl.query);
@@ -188,7 +188,7 @@ app.get('/model', (req, res) => {
 
 app.post('/model', (req, res) => {
   let metadataBuf = '';
-  const id = 'imagemodel.tar';
+  const id = 'imagemodel.zip';
   const file = {};
 
   const { createFile } = req.mimikContext;
@@ -256,7 +256,7 @@ app.post('/model', (req, res) => {
 });
 
 app.delete('/model', (req, res) => {
-  const fileId = 'imagemodel.tar';
+  const fileId = 'imagemodel.zip';
   const { storage } = req.mimikContext;
   const authorization = req.authorization;
   const authKey = req.mimikContext.env.AUTHORIZATION_KEY;

@@ -37,7 +37,7 @@ export default class NodesMapper {
     try {
       const copy = [];
       nodes.forEach((node) => {
-        const example = find(node.services, srv => srv.serviceType === 'example-v1');
+        const example = find(node.services, srv => srv.serviceType === 'modelshare-v1');
         if (example) {
           const name = find(node.attributes, att => att.name === 'name');
           const os = find(node.characteristics, att => att.name === 'os');
