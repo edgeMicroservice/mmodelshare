@@ -16,5 +16,5 @@
       "jsx-a11y/redundant-alt": "off",
       "jsx-a11y/valid-aria-role": "off",
       "no-underscore-dangle": "off"
-    },
+    }
 }
