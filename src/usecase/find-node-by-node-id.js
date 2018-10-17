@@ -12,7 +12,6 @@ export default class FindNodeByNodeId {
     const emptyAction = Action.wrap([]);
     const proximityAction = this.proximityAction.buildAction(emptyAction).guard(() => []);
 
-
     return Action.parallel([nearbyAction, proximityAction])
       .next((datas) => {
         let temp = true;
