@@ -63,7 +63,7 @@ export default class GetProximityDrives {
           new Error('failed to search for devices');
         return proximity;
       })
-      .next(proximity => NodesMapper.transformMdsNodes(proximity.nodes, serviceType));
+      .next(proximity => NodesMapper.transformMdsNodes(proximity.nodes, null, serviceType));
   }
 }
 

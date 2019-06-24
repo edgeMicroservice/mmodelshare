@@ -62,6 +62,6 @@ export default class GetNearbyDrives {
           new Error('failed to search for devices');
         return linkLocal;
       })
-      .next(linkLocal => NodesMapper.transformMdsNodes(linkLocal.nodes, serviceType));
+      .next(linkLocal => NodesMapper.transformMdsNodes(linkLocal.nodes, null, serviceType));
   }
 }
