@@ -8,9 +8,10 @@ export default function mimikInject(context, req) {
   const { uMDS } = context.env;
   const { edge, http, storage } = context;
   const authorization = req.authorization;
+  const serviceType = context.info.serviceType;
 
-  const getNearByDrives = new GetNearbyDrives(uMDS, http, authorization, edge);
-  const getProximityDrives = new GetProximityDrives(uMDS, http, authorization, edge);
+  const getNearByDrives = new GetNearbyDrives(uMDS, http, authorization, edge, serviceType);
+  const getProximityDrives = new GetProximityDrives(uMDS, http, authorization, edge, serviceType);
   const createFile = new CreateFile(storage);
   const getFileById = new GetFileById(storage);
   const findNode = new FindNodeByNodeId(getNearByDrives, getProximityDrives);

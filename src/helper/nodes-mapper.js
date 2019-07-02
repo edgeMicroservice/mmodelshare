@@ -33,11 +33,11 @@ export default class NodesMapper {
     return local.url.href;
   }
 
-  static transformMdsNodes(nodes, avatarData) {
+  static transformMdsNodes(nodes, avatarData, serviceType) {
     try {
       const copy = [];
       nodes.forEach((node) => {
-        const example = find(node.services, srv => srv.serviceType === 'modelshare-v1');
+        const example = find(node.services, srv => srv.serviceType === serviceType || srv.serviceType === 'modelshare-v1');
         if (example) {
           const name = find(node.attributes, att => att.name === 'name');
           const os = find(node.characteristics, att => att.name === 'os');

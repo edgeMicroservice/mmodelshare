@@ -3,15 +3,16 @@ import NodesMapper from '../helper/nodes-mapper';
 import extractToken from '../helper/authorization-helper';
 
 export default class GetNearbyDrives {
-  constructor(localMds, http, authorization, edge) {
+  constructor(localMds, http, authorization, edge, serviceType) {
     this.localMds = localMds;
     this.http = http;
     this.edge = edge;
     this.authorization = authorization;
+    this.serviceType = serviceType;
   }
 
   buildAction() {
-    const { localMds, http, authorization, edge } = this;
+    const { localMds, http, authorization, edge, serviceType } = this;
     const accessToken = extractToken(authorization);
 
     return new Action((cb) => {
@@ -61,6 +62,6 @@ export default class GetNearbyDrives {
           new Error('failed to search for devices');
         return linkLocal;
       })
-      .next(linkLocal => NodesMapper.transformMdsNodes(linkLocal.nodes));
+      .next(linkLocal => NodesMapper.transformMdsNodes(linkLocal.nodes, null, serviceType));
   }
 }
