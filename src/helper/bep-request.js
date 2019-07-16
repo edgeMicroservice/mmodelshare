@@ -1,18 +1,5 @@
 import Action from 'action-js';
 
-export const requestBep = edge => new Action((cb) => {
-  edge.requestBep({
-    success: (result) => {
-      cb({
-        href: result.data,
-      });
-    },
-    error: (err) => {
-      cb(new Error(err.message));
-    },
-  });
-});
-
 export const requestRemoteBep = (drive, http) => new Action((cb) => {
   const sepHeader = `\r\nx-mimik-port: ${drive.routing.port}\r\nx-mimik-routing: ${drive.routing.id}`;
   http.request(({
@@ -25,5 +12,11 @@ export const requestRemoteBep = (drive, http) => new Action((cb) => {
       cb(new Error(err.message));
     },
   }));
+});
+
+export const getHmacCodeByReq = (accessToken, nodeId, edge) => new Action((cb) => {
+  edge.getRequestBepHmacCode(accessToken, nodeId,
+    hmacCode => cb(hmacCode),
+    e => cb(e));
 });
 
