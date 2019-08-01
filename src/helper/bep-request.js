@@ -1,8 +1,8 @@
 import Action from 'action-js';
 
-export const requestRemoteBep = (drive, http) => new Action((cb) => {
+export const requestRemoteBep = (req, drive) => new Action((cb) => {
   const sepHeader = `\r\nx-mimik-port: ${drive.routing.port}\r\nx-mimik-routing: ${drive.routing.id}`;
-  http.request(({
+  req.context.http.request(({
     url: `${drive.routing.url}/superdrive/v1/bep`,
     authorization: sepHeader,
     success: (result) => {
