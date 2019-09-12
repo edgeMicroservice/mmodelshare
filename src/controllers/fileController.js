@@ -1,6 +1,6 @@
-import response from '../edge-ms-helper/response-helper';
+import response from 'edge-ms-helper/response-helper';
+import { extractToken } from 'edge-ms-helper/authorization-helper';
 import makeFileProcessor from '../processors/fileProcessor';
-import { extractToken } from '../edge-ms-helper/authorization-helper';
 
 function getModel(req, res) {
   const { alt } = req.swagger.params;

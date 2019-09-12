@@ -5,7 +5,7 @@ const BUILD_DIR = path.resolve(__dirname, 'build');
 const SRC_DIR = path.resolve(__dirname, 'src');
 
 const config = {
-  entry: `${SRC_DIR}/index.js`,
+  entry: [`${SRC_DIR}/index.js`],
   output: {
     path: BUILD_DIR,
     filename: 'index.js',
@@ -25,7 +25,9 @@ const config = {
         join_vars: true,
         if_return: true,
       },
-      output: { comments: false },
+      output: {
+        comments: false,
+      },
     }),
   ],
   module: {
@@ -38,7 +40,8 @@ const config = {
       },
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: /node_modules\/(?!edge-ms-helper)/,
+        // exclude: /node_modules/,
         query: {
           presets: ['es2015', 'stage-0'],
         },
