@@ -1,0 +1,10 @@
+name: mimik
+api:
+  name: mmodelshare
+  swagger: swagger-mmodelshare/mmodelshare-api-swagger.yml
+  controllerPath: ../src/controllers
+  outputPath: ./build
+package:
+  imageName: mmodelshare
+  imageIndexFilePath: ./build/index.js
+  outputFolder: ./deploy

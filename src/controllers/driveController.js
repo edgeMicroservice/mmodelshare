@@ -1,4 +1,4 @@
-import response from '../edge-ms-helper/response-helper';
+import response from 'edge-ms-helper/response-helper';
 import makeDriveProcessor from '../processors/driveProcessor';
 
 function getDrives(req, res) {

@@ -1,4 +1,4 @@
-const { init } = require('./edge-ms-helper/init-helper');
-const swaggerMiddleware = require('./middleware/mmodelshare-swagger-mw');
+import { init } from 'edge-ms-helper/init-helper';
+import swaggerMiddleware from '../build/mmodelshare-swagger-mw';
 
 mimikModule.exports = init(swaggerMiddleware);

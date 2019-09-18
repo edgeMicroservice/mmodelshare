@@ -1,8 +1,6 @@
 node_modules
 build
+deploy
 
-deploy/modelshare-v1.tar
-deploy/index.js
-deploy/deploy.sh
 .vscode/settings.json
 src/index.js

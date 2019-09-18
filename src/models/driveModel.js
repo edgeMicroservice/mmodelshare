@@ -1,6 +1,6 @@
 import Action from 'action-js';
 import { find } from 'lodash';
-import { extractToken } from '../edge-ms-helper/authorization-helper';
+import { extractToken } from 'edge-ms-helper/authorization-helper';
 import NodesMapper from '../helper/nodes-mapper';
 
 function makeDriveModel(context, authorization) {
