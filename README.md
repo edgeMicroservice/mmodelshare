@@ -1,4 +1,5 @@
 # mModelShare
+---
 
 This open source mModelShare microservice created by the mimik team is an example cross-platform solution for sharing machine learning models across devices. More specifically, this edgeSDK microservice has the following functionality:
 
@@ -7,6 +8,7 @@ This open source mModelShare microservice created by the mimik team is an exampl
 3. Retrieving machine learning models from other devices.
 
 # Build Process
+---
 
 The build script **default.yml** is specified under config directory.
 
@@ -15,6 +17,7 @@ The build script **default.yml** is specified under config directory.
 3. Package to container: ```npm run package```
 
 # Deployment
+---
 
 For **mobile application development**, deployment is programmatically by **Android or iOS Wrappers**, learn more about it:
 
@@ -28,14 +31,13 @@ For **microservice development**, things you will need:
 - Run the following commands under the same directory of your containerized microservice file:
 
 ```
-curl -i -H 'Authorization: Bearer <edge Access Token>' -F "image=@<file name>.tar" http://<target IP address>:8083/mcm/v1/images
+curl -i -H "Authorization: Bearer <edge Access Token>" -F "image=@mmodelshare-v1.tar" http://localhost:8083/mcm/v1/images
 ```
 
 - To run the microservice after successful deployment, with environment variables:
 
 ```
-curl -i -H 'Authorization: Bearer <edge Access Token>' -d '{"name": <file name>, "image": <image name>, "env": {"MCM.BASE_API_PATH": "<request base path>", "MCM.WEBSOCKET_SUPPORT": "true", "<add your environment variable name>": "<add your environment variable>"} }' http://<target IP address>:8083/mcm/v1/containers
+curl -i -H "Authorization: Bearer <edge Access Token>" -d '{"name": "model-v1", "image": "model-v1", "env": {"MCM.BASE_API_PATH": "/modelshare/v1", "uMDS": "http://localhost:8083/mds/v1"} }' http://localhost:8083/mcm/v1/containers
 ```
 
 - For more information and explanation, you can visit our [mCM container management API references](https://developer.mimik.com/resources/documentation/latest/getting-started/quick-start) and [general guide on packaing, deployment, and exporting microservice](https://developer.mimik.com/resources/documentation/latest/apis/mcm).
-
