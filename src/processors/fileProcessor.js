@@ -15,27 +15,37 @@ function makeFileProcessor(context) {
     });
   }
 
-  function createFile(fileMetadata, file) {
+  function getFiles() {
     return new Action((cb) => {
-      if (!fileMetadata) {
+      try {
+        cb(fileModel.getAll());
+      } catch (e) {
+        cb(e);
+      }
+    });
+  }
+
+  function createFile(metadata, file) {
+    return new Action((cb) => {
+      if (!metadata) {
         cb(new Error('File metadata is required.'));
         return;
       }
-      const validMetadata = fileModel.validate(fileMetadata, file.path);
+      const validMetadata = fileModel.validate(metadata, file.path);
       if (!validMetadata) {
         cb(new Error('Invalid metadata'));
         return;
       }
 
-      const metadata = {
+      const fileMetadata = {
         ...validMetadata,
         path: file.path,
         size: file.size,
       };
 
       try {
-        fileModel.insert(metadata);
-        cb(metadata);
+        fileModel.insert(fileMetadata);
+        cb(fileMetadata);
       } catch (e) {
         cb(new Error(`insert error: ${e.message}`));
       }
@@ -54,6 +64,7 @@ function makeFileProcessor(context) {
 
   return {
     getFile,
+    getFiles,
     createFile,
     deleteFile,
   };

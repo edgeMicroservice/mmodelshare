@@ -9,14 +9,12 @@ function makeFileModel(storage) {
 
       return {
         id: fileId,
-        kind: 'drive#file',
         name: file.name,
-        mimeType: file.mimeType,
+        category: file.category,
         description: file.description,
-        contentHints: file.contentHints,
-        ImageMediaMetadata: file.ImageMediaMetadata,
-        VideoMediaMetadata: file.VideoMediaMetadata,
+        mimeType: file.mimeType,
         createTime: new Date(Date.now()).toISOString(),
+        kind: 'drive#file',
       };
     } catch (e) {
       return undefined;
@@ -36,6 +34,14 @@ function makeFileModel(storage) {
     return JSON.parse(file);
   }
 
+  function getAll() {
+    const db = {};
+    storage.eachItem((key, value) => {
+      db[key] = JSON.parse(value);
+    });
+    return db;
+  }
+
   function deleteById(fileId) {
     const file = findById(fileId);
     storage.removeItem(fileId);
@@ -47,6 +53,7 @@ function makeFileModel(storage) {
     validate,
     insert,
     findById,
+    getAll,
     deleteById,
   };
 }
