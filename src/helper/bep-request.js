@@ -1,6 +1,6 @@
-import Action from 'action-js';
+const Action = require('action-js');
 
-export const requestRemoteBep = (req, drive) => new Action((cb) => {
+const requestRemoteBep = (req, drive) => new Action((cb) => {
   const sepHeader = `\r\nx-mimik-port: ${drive.routing.port}\r\nx-mimik-routing: ${drive.routing.id}`;
   req.context.http.request(({
     url: `${drive.routing.url}/superdrive/v1/bep`,
@@ -14,9 +14,14 @@ export const requestRemoteBep = (req, drive) => new Action((cb) => {
   }));
 });
 
-export const getHmacCodeByReq = (accessToken, nodeId, edge) => new Action((cb) => {
+const getHmacCodeByReq = (accessToken, nodeId, edge) => new Action((cb) => {
   edge.getRequestBepHmacCode(accessToken, nodeId,
     hmacCode => cb(hmacCode),
     e => cb(e));
 });
+
+module.exports = {
+  requestRemoteBep,
+  getHmacCodeByReq,
+};
 

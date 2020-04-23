@@ -1,6 +1,6 @@
-import find from 'lodash/find';
+const find = require('lodash/find');
 
-export default class NodesMapper {
+class NodesMapper {
   static getRouting(node) {
     const route = {
       nodeId: node.id,
@@ -59,3 +59,5 @@ export default class NodesMapper {
     }
   }
 }
+
+module.exports = NodesMapper;

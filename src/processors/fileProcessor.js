@@ -1,5 +1,5 @@
-import Action from 'action-js';
-import makeFileModel from '../models/fileModel';
+const Action = require('action-js');
+const makeFileModel = require('../models/fileModel');
 
 function makeFileProcessor(context) {
   const { storage } = context;
