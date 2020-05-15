@@ -1,6 +1,6 @@
-import response from 'edge-ms-helper/response-helper';
-import { extractToken } from 'edge-ms-helper/authorization-helper';
-import makeFileProcessor from '../processors/fileProcessor';
+const response = require('@mimik/edge-ms-helper/response-helper');
+const { extractToken } = require('@mimik/edge-ms-helper/authorization-helper');
+const makeFileProcessor = require('../processors/fileProcessor');
 
 function getModel(req, res) {
   const { alt, id } = req.swagger.params;
