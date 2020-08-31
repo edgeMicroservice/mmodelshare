@@ -1,0 +1,71 @@
+####
+# command pallete > Open Setting JSON
+# rest-client.environmentVariables
+
+####
+@host = http://localhost:8083
+@imagename = mmodelshare
+####
+GET {{host}}/mcm/v1/images
+Authorization: bearer {{edgeToken}}
+
+
+####
+POST {{host}}/mcm/v1/images
+Content-Type: multipart/form-data; boundary=$Boundary$
+Authorization: Bearer {{edgeToken}}
+
+--$Boundary$
+Content-Disposition: form-data; name="image"; filename="{{imagename}}-v1.tar"
+
+< /Users/jeremy/Workspace/hz-demo/mmodelshare/deploy/{{imagename}}-v1.tar
+--$Boundary$--
+
+
+####
+POST {{host}}/mcm/v1/containers
+Content-Type: application/json
+Authorization: Bearer {{edgeToken}}
+
+{
+  "env": {
+    "AUTHORIZATION_KEY": "test",
+    "MCM.BASE_API_PATH": "/{{imagename}}/v1",
+    "MCM.WEBSOCKET_SUPPORT": "false",
+    "MODEL_URL": "",
+    "MODEL_VERSIOON": ""
+  },
+  "id": "{{imagename}}-v1",
+  "image": "{{imagename}}-v1",
+  "imageId": "{{imagename}}-v1",
+  "name": "{{imagename}}-v1",
+  "state": "started"
+}
+
+###
+GET {{host}}/{{clientId}}/{{imagename}}/v1/models
+
+
+####
+DELETE {{host}}/{{clientId}}/{{imagename}}/v1/models/default
+Authorization: Bearer test
+
+
+####
+POST {{host}}/{{clientId}}/{{imagename}}/v1/models
+Content-Type: multipart/form-data; boundary=$Boundary$
+Authorization: Bearer test
+
+--$Boundary$
+Content-Disposition: form-data; name="metadata"; 
+
+{
+  "name": "default",
+  "category": "image-recognition",
+  "mimeType": "application/zip"
+}
+--$Boundary$
+Content-Disposition: form-data; name="file"; filename="default"
+
+< /Users/jeremy/Workspace/hz-demo/mmodelshare/deploy/{{imagename}}-v1.tar
+--$Boundary$--
