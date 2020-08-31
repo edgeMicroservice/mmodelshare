@@ -1,4 +1,5 @@
 function makeFileModel(storage) {
+  const FILE_TAG = 'FILE';
   function validate(json, fileId) {
     try {
       const file = JSON.parse(json);
@@ -23,7 +24,7 @@ function makeFileModel(storage) {
 
   function insert(metadata) {
     const json = JSON.stringify(metadata);
-    storage.setItem(metadata.id, json);
+    storage.setItemWithTag(metadata.id, json, FILE_TAG);
   }
 
   function findById(fileId) {
@@ -35,9 +36,10 @@ function makeFileModel(storage) {
   }
 
   function getAll() {
-    const db = {};
-    storage.eachItem((key, value) => {
-      db[key] = JSON.parse(value);
+    const db = [];
+    storage.eachItemByTag(FILE_TAG, (key, value) => {
+      const json = JSON.parse(value);
+      db.push(json);
     });
     return db;
   }

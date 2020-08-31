@@ -69,3 +69,21 @@ Content-Disposition: form-data; name="file"; filename="default"
 
 < /Users/jeremy/Workspace/hz-demo/mmodelshare/deploy/{{imagename}}-v1.tar
 --$Boundary$--
+
+
+####
+GET {{host}}/{{clientId}}/{{imagename}}/v1/classificationEvents
+
+####
+POST {{host}}/{{clientId}}/{{imagename}}/v1/classificationEvents
+Content-Type: application/json
+Authorization: Bearer test
+
+{
+  "modelId": "default",
+  "score": 30,
+  "classification": "shower cap",
+  "image": "local_image_path"
+}
+
+####

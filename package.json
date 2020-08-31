@@ -21,8 +21,9 @@
     "router": "^1.3.3"
   },
   "devDependencies": {
+    "swagger-mmodelshare": "bitbucket:mimiktech/swagger-mmodelshare#9f3d136",
+    "@mimik/swagger-mw-codegen": "bitbucket:mimiktech/swagger-mw-codegen#3b38b36",
     "@mimik/edge-ms-packager": "^1.0.2",
-    "@mimik/swagger-mw-codegen": "^1.1.3",
     "@babel/core": "^7.7.0",
     "@babel/preset-env": "^7.6.3",
     "babel-eslint": "^10.0.3",
