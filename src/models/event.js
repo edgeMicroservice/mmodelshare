@@ -2,6 +2,7 @@ const Action = require('action-js');
 
 function makeEventModel(context) {
   const { storage } = context;
+  const { MAX_EVENT_COUNT } = context.env;
   const EVENT_TAG = 'EVENT';
 
   function generate() {
@@ -33,6 +34,26 @@ function makeEventModel(context) {
     });
   }
 
+  function eventCleanup() {
+    return getEvents()
+      .next((events) => {
+        if (events.length <= MAX_EVENT_COUNT) {
+          return [];
+        }
+
+        const count = events.length - MAX_EVENT_COUNT;
+        const removeEvents = events.slice(0, count);
+        return removeEvents;
+      })
+      .next((removeEvents) => {
+        removeEvents.forEach((evt) => {
+          storage.removeItem(evt.id);
+        });
+
+        return removeEvents;
+      });
+  }
+
   function createEvent(newEvent) {
     return new Action((cb) => {
       const evt = {
@@ -45,7 +66,7 @@ function makeEventModel(context) {
       storage.setItemWithTag(evt.id, json, EVENT_TAG);
 
       cb(evt);
-    });
+    }).next(evt => eventCleanup().next(() => evt));
   }
 
   return {

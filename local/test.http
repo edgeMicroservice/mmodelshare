@@ -33,7 +33,8 @@ Authorization: Bearer {{edgeToken}}
     "MCM.BASE_API_PATH": "/{{imagename}}/v1",
     "MCM.WEBSOCKET_SUPPORT": "false",
     "MODEL_URL": "",
-    "MODEL_VERSIOON": ""
+    "MODEL_VERSIOON": "",
+    "MAX_EVENT_COUNT": "5"
   },
   "id": "{{imagename}}-v1",
   "image": "{{imagename}}-v1",
