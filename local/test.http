@@ -18,7 +18,7 @@ Authorization: Bearer {{edgeToken}}
 --$Boundary$
 Content-Disposition: form-data; name="image"; filename="{{imagename}}-v1.tar"
 
-< /Users/jeremy/Workspace/hz-demo/mmodelshare/deploy/{{imagename}}-v1.tar
+< ../deploy/{{imagename}}-v1.tar
 --$Boundary$--
 
 
