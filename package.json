@@ -21,19 +21,19 @@
     "router": "^1.3.3"
   },
   "devDependencies": {
-    "swagger-mmodelshare": "bitbucket:mimiktech/swagger-mmodelshare#803d0b8",
-    "@mimik/swagger-mw-codegen": "bitbucket:mimiktech/swagger-mw-codegen#3b38b36",
-    "@mimik/edge-ms-packager": "^1.0.2",
     "@babel/core": "^7.7.0",
     "@babel/preset-env": "^7.6.3",
+    "@mimik/edge-ms-packager": "^1.0.2",
+    "@mimik/swagger-mw-codegen": "bitbucket:mimiktech/swagger-mw-codegen#f4f6f47",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2",
     "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
     "eslint-loader": "^3.0.2",
+    "eslint-plugin-import": "^2.18.2",
+    "swagger-mmodelshare": "bitbucket:mimiktech/swagger-mmodelshare#f08e193",
+    "terser-webpack-plugin": "^2.2.1",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.9",
-    "terser-webpack-plugin": "^2.2.1"
+    "webpack-cli": "^3.3.9"
   }
 }
