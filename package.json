@@ -31,7 +31,7 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-loader": "^3.0.2",
     "eslint-plugin-import": "^2.18.2",
-    "swagger-mmodelshare": "bitbucket:mimiktech/swagger-mmodelshare#f08e193",
+    "swagger-mmodelshare": "bitbucket:mimiktech/swagger-mmodelshare#2ba003b",
     "terser-webpack-plugin": "^2.2.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9"

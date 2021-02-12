@@ -9,22 +9,33 @@ function makeEventProcessor(context) {
   }
 
   function createEvent(newEvent, webhookUrl, apiKey) {
-    return eventModel.createEvent(newEvent)
-      .next(data => new Action((cb) => {
-        if (webhookUrl) {
-          return context.http.request({
-            type: 'POST',
-            data,
-            url: webhookUrl,
-            headers: {
-              'x-api-key': apiKey,
+    return new Action((cb) => {
+      if (webhookUrl) {
+        return context.http.request({
+          type: 'POST',
+          data: newEvent,
+          url: webhookUrl,
+          headers: {
+            'x-api-key': apiKey,
+          },
+          success: res => cb(eventModel.createEvent({
+            ...newEvent,
+            webhookResult: {
+              status: 'success',
+              response: JSON.parse(res.data),
             },
-            success: res => cb({ ...data, webhookResult: JSON.parse(res.data) }),
-            error: err => cb({ ...data, webhookResult: err }),
-          });
-        }
-        return cb(data);
-      }));
+          })),
+          error: err => cb(eventModel.createEvent({
+            ...newEvent,
+            webhookResult: {
+              status: 'error',
+              response: err,
+            },
+          })),
+        });
+      }
+      return cb(eventModel.createEvent(newEvent));
+    }).next(data => data);
   }
 
   return {

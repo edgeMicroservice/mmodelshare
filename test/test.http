@@ -28,7 +28,7 @@ Authorization: Bearer {{edgeToken}}
     "MCM.DB_ENCRYPTION_SUPPORT": "false",
     "MCM.WEBSOCKET_SUPPORT": "true",
     "API_KEY": "1234",
-    "WEBHOOK_URL": "http://localhost:8083/jsonrpc/v1"
+    "WEBHOOK_URL": "https://httpbin.org/post"
   },
   "image": "mmodelshare-v1",
   "name": "mmodelshare-v1"
@@ -89,3 +89,7 @@ x-api-key: {{apiKey}}
     }
   ]
 }
+
+###
+GET {{host}}/{{clientId}}/modelshare/v1/classificationEvents
+Content-Type: application/json
