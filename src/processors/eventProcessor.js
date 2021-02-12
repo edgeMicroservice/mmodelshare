@@ -8,7 +8,7 @@ function makeEventProcessor(context) {
     return eventModel.getEvents();
   }
 
-  function createEvent(newEvent, webhookUrl, apiKey) {
+  function createEvent(newEvent, webhookUrl, webhookApiKey) {
     return new Action((cb) => {
       if (webhookUrl) {
         return context.http.request({
@@ -16,7 +16,7 @@ function makeEventProcessor(context) {
           data: newEvent,
           url: webhookUrl,
           headers: {
-            'x-api-key': apiKey,
+            'x-api-key': webhookApiKey,
           },
           success: res => cb(eventModel.createEvent({
             ...newEvent,
