@@ -1,7 +1,5 @@
 @host = http://localhost:8083
 
-@edgeToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNDY2Njg4Nzk5MDg4NzQ2NDk2IiwianRpIjoiYm5KbmdrYW5KbERVV1RLSEhJbEJNUn5fMmdnaUxZZzRSaHV-dnN6QTg3WSIsImNsaWVudF9pZCI6ImQ0NTJkZWM2LTA2NzctNDBiYi04MmZhLWMyNGE1OWY5NzZmZiIsImF6cCI6ImQ0NTJkZWM2LTA2NzctNDBiYi04MmZhLWMyNGE1OWY5NzZmZiIsImlzcyI6Imh0dHBzOi8vbWlkLm1pbWlrMzYwLmNvbS9tSUQvdjEvb2F1dGgvdG9rZW4iLCJub2RlX2lkIjoiYzdiMDY2NmY3ZjlkYWNjM2E2OWE2ZDljMTE0MDYxZGRlMjM1OWFjODlmNjBiMWE2N2Y0ZGNkYTQiLCJhdWQiOlsiaHR0cHM6Ly9taW1payIsImh0dHBzOi8vbXN0Lm1pbWlrMzYwLmNvbS9tU1QvdjEvY2xpZW50cy9HZW5lcmljLWVkZ2UiXSwic2NvcGUiOiJvcGVuaWQgZWRnZTptY20gZWRnZTpjbHVzdGVycyBlZGdlOmFjY291bnQ6YXNzb2NpYXRlIGVkZ2U6YWNjb3VudDp1bmFzc29jaWF0ZSBlZGdlOnJlYWQ6YWNjb3VudGtleSIsImlhdCI6MTYxMTk2MDQxMiwiZXhwIjoxNjI3NTEyNDEyfQ.RCwVOG-lqcAkZwelTu4LGteba8M1xySSpF9F1lh4CMo
-
 @clientId = d452dec6-0677-40bb-82fa-c24a59f976ff
 
 @apiKey = 1234
@@ -28,22 +26,22 @@ Authorization: Bearer {{edgeToken}}
     "MCM.DB_ENCRYPTION_SUPPORT": "false",
     "MCM.WEBSOCKET_SUPPORT": "true",
     "API_KEY": "1234",
-    "WEBHOOK_URL": "https://httpbin.org/post"
+    "WEBHOOK_API_KEY": "1234",
+    "WEBHOOK_URL": "http://localhost:8083/d452dec6-0677-40bb-82fa-c24a59f976ff/tms/v1/webhook/events"
   },
   "image": "mmodelshare-v1",
   "name": "mmodelshare-v1"
 }
 
 ###
-GET {{host}}/mcm/v1/containers
-Content-Type: application/json
-Authorization: Bearer {{edgeToken}}
-
-###
 DELETE {{host}}/mcm/v1/containers/{{clientId}}-mmodelshare-v1
 Content-Type: application/json
 Authorization: Bearer {{edgeToken}}
 
+###
+GET {{host}}/mcm/v1/containers
+Content-Type: application/json
+Authorization: Bearer {{edgeToken}}
 
 ###
 POST {{host}}/{{clientId}}/modelshare/v1/models
@@ -84,7 +82,7 @@ x-api-key: {{apiKey}}
   "extras": [
     {
       "id": "c66a770c-6a35-11eb-9439-0242ac130002",
-      "path": "/usr/lib/videos/example.mp4",
+      "path": "/home/zhi/Downloads/180626_17_MyeongdongSunrise_02.mp4",
       "mimeType": "video/mp4"
     }
   ]

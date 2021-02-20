@@ -34,9 +34,6 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: [
-          /node_modules\/(?!@mimik\/edge-ms-helper)/,
-        ],
         query: {
           presets: ['@babel/preset-env'],
         },
