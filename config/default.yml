@@ -3,6 +3,7 @@ api:
   name: mmodelshare
   swagger: node_modules/swagger-mmodelshare/mmodelshare-api-swagger.yml
   controllerPath: ../src/controllers
+  securityHandlerPath: ../src/handlers
   outputPath: ./build
 package:
   imageName: mmodelshare

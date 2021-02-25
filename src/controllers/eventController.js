@@ -5,7 +5,7 @@ function getEvents(req, res) {
   const { context } = req;
   const eventProcessor = makeEventProcessor(context);
 
-  eventProcessor.getEvents()
+  return eventProcessor.getEvents()
     .next((data => response.sendResult({ data }, 200, res)))
     .guard(err => response.sendError(err, res))
     .go();
@@ -14,9 +14,10 @@ function getEvents(req, res) {
 function createEvent(req, res) {
   const { newEvent } = req.swagger.params;
   const { context } = req;
+  const { WEBHOOK_URL: webhookUrl, WEBHOOK_API_KEY: webhookApiKey } = context.env;
   const eventProcessor = makeEventProcessor(context);
 
-  eventProcessor.createEvent(newEvent)
+  return eventProcessor.createEvent(newEvent, webhookUrl, webhookApiKey)
     .next((createdItem => response.sendResult(createdItem, 200, res)))
     .guard(err => response.sendError(err, res))
     .go();

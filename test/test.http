@@ -1,0 +1,93 @@
+@host = http://localhost:8083
+
+@clientId = d452dec6-0677-40bb-82fa-c24a59f976ff
+
+@apiKey = 1234
+
+###
+POST {{host}}/mcm/v1/images
+Content-Type: multipart/form-data; boundary=$Boundary$
+Authorization: Bearer {{edgeToken}}
+
+--$Boundary$
+Content-Disposition: form-data; name="image"; filename="mmodelshare-v1.tar"
+
+< ../deploy/mmodelshare-v1.tar
+--$Boundary$
+
+###
+POST {{host}}/mcm/v1/containers
+Content-Type: application/json
+Authorization: Bearer {{edgeToken}}
+
+{
+  "env": {
+    "MCM.BASE_API_PATH": "/modelshare/v1",
+    "MCM.DB_ENCRYPTION_SUPPORT": "false",
+    "MCM.WEBSOCKET_SUPPORT": "true",
+    "API_KEY": "1234",
+    "WEBHOOK_API_KEY": "1234",
+    "WEBHOOK_URL": "http://localhost:8083/d452dec6-0677-40bb-82fa-c24a59f976ff/tms/v1/webhook/events"
+  },
+  "image": "mmodelshare-v1",
+  "name": "mmodelshare-v1"
+}
+
+###
+DELETE {{host}}/mcm/v1/containers/{{clientId}}-mmodelshare-v1
+Content-Type: application/json
+Authorization: Bearer {{edgeToken}}
+
+###
+GET {{host}}/mcm/v1/containers
+Content-Type: application/json
+Authorization: Bearer {{edgeToken}}
+
+###
+POST {{host}}/{{clientId}}/modelshare/v1/models
+Content-Type: multipart/form-data; boundary=$Boundary$
+x-api-key: {{apiKey}}
+
+--$Boundary$
+Content-Disposition: form-data; name="file"; filename="mmodelshare-v1.tar"
+
+< ../deploy/mmodelshare-v1.tar
+--$Boundary$
+Content-Disposition: form-data; name="metadata";
+
+{
+  "name": "mmodelshare-v1.tar",
+  "version": "1.3.3",
+  "description": "microservices",
+  "mimeType":"application/tar"
+}
+--$Boundary$--
+
+###
+GET {{host}}/{{clientId}}/modelshare/v1/models
+
+###
+DELETE {{host}}/{{clientId}}/modelshare/v1/models/mmodelshare-v1.tar
+x-api-key: {{apiKey}}
+
+###
+POST {{host}}/{{clientId}}/modelshare/v1/classificationEvents
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "modelId": "mmodelshare-v1.tar",
+  "score": 0,
+  "classification": "motion",
+  "extras": [
+    {
+      "id": "c66a770c-6a35-11eb-9439-0242ac130002",
+      "path": "/home/zhi/Downloads/180626_17_MyeongdongSunrise_02.mp4",
+      "mimeType": "video/mp4"
+    }
+  ]
+}
+
+###
+GET {{host}}/{{clientId}}/modelshare/v1/classificationEvents
+Content-Type: application/json
