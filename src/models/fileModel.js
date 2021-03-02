@@ -102,6 +102,8 @@ function makeFileModel(context) {
 
     const json = JSON.stringify(metadata);
     storage.setItemWithTag(metadata.id, json, FILE_TAG);
+
+    return metadata;
   }
 
   return {

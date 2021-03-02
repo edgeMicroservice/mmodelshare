@@ -130,6 +130,7 @@ Content-Type: application/json
 
 ###
 POST http://localhost:8083/cc616330-6906-4dd4-bcac-0fc145233d92/mmodelshare/v1/ess/events
+Content-Type: application/json
 
 {
   "id":"img_reco.zip",
