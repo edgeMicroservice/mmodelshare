@@ -68,9 +68,21 @@ function deleteModel(req, res) {
     .go();
 }
 
+function handleEssEvent(req, res) {
+  const { newEvent } = req.swagger.params;
+  const { context } = req;
+
+  return makeFileProcessor(context)
+    .handleEssEvent(newEvent)
+    .next((createdItem => response.sendResult(createdItem, 200, res)))
+    .guard(err => response.sendError(err, res))
+    .go();
+}
+
 module.exports = {
   getModel,
   getModels,
   createModel,
   deleteModel,
+  handleEssEvent,
 };

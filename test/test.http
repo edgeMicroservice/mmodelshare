@@ -1,6 +1,7 @@
 @host = http://localhost:8083
 
-@clientId = d452dec6-0677-40bb-82fa-c24a59f976ff
+## @clientId = d452dec6-0677-40bb-82fa-c24a59f976ff
+@clientId = cc616330-6906-4dd4-bcac-0fc145233d92
 
 @apiKey = 1234
 
@@ -22,12 +23,29 @@ Authorization: Bearer {{edgeToken}}
 
 {
   "env": {
-    "MCM.BASE_API_PATH": "/modelshare/v1",
-    "MCM.DB_ENCRYPTION_SUPPORT": "false",
+    "MCM.BASE_API_PATH": "/mmodelshare/v1",
     "MCM.WEBSOCKET_SUPPORT": "true",
     "API_KEY": "1234",
     "WEBHOOK_API_KEY": "1234",
     "WEBHOOK_URL": "http://localhost:8083/d452dec6-0677-40bb-82fa-c24a59f976ff/tms/v1/webhook/events"
+  },
+  "image": "mmodelshare-v1",
+  "name": "mmodelshare-v1"
+}
+
+###
+POST {{host}}/mcm/v1/containers
+Content-Type: application/json
+Authorization: Bearer {{edgeToken}}
+
+{
+  "env": {
+    "API_KEY": "1234",
+    "MCM.BASE_API_PATH": "/mmodelshare/v1",
+    "MCM.WEBSOCKET_SUPPORT": "false",
+    "MODEL_URL": "{{host}}/cc616330-6906-4dd4-bcac-0fc145233d92/mcdn/v1/dl/ml_model/mobilenet.zip",
+    "MODEL_VERSION": "1.0.0",
+    "MAX_EVENT_COUNT": "5"
   },
   "image": "mmodelshare-v1",
   "name": "mmodelshare-v1"
@@ -44,30 +62,33 @@ Content-Type: application/json
 Authorization: Bearer {{edgeToken}}
 
 ###
-POST {{host}}/{{clientId}}/modelshare/v1/models
+POST {{host}}/{{clientId}}/mmodelshare/v1/models
 Content-Type: multipart/form-data; boundary=$Boundary$
 x-api-key: {{apiKey}}
 
 --$Boundary$
-Content-Disposition: form-data; name="file"; filename="mmodelshare-v1.tar"
+Content-Disposition: form-data; name="file"; filename="default"
 
 < ../deploy/mmodelshare-v1.tar
 --$Boundary$
 Content-Disposition: form-data; name="metadata";
 
 {
-  "name": "mmodelshare-v1.tar",
-  "version": "1.3.3",
+  "name": "default",
+  "version": "mobilenet-1.0.0",
   "description": "microservices",
   "mimeType":"application/tar"
 }
 --$Boundary$--
 
-###
-GET {{host}}/{{clientId}}/modelshare/v1/models
+####
+GET {{host}}/{{clientId}}/mmodelshare/v1/models/default
 
 ###
-DELETE {{host}}/{{clientId}}/modelshare/v1/models/mmodelshare-v1.tar
+GET {{host}}/{{clientId}}/mmodelshare/v1/models
+
+###
+DELETE {{host}}/{{clientId}}/mmodelshare/v1/models/default
 x-api-key: {{apiKey}}
 
 ###
@@ -89,5 +110,38 @@ x-api-key: {{apiKey}}
 }
 
 ###
-GET {{host}}/{{clientId}}/modelshare/v1/classificationEvents
+GET {{host}}/{{clientId}}/mmodelshare/v1/classificationEvents
 Content-Type: application/json
+
+
+###
+POST {{host}}/{{clientId}}/mmodelshare/v1/ess/events
+Content-Type: application/json
+
+{
+  "id": "img_reco.zip",
+  "type": "ml_model",
+  "dataOriginLink":
+   { "url":
+      "http://192.168.4.27:8083/cc616330-6906-4dd4-bcac-0fc145233d92/mess/v1/objects/ml_model/img_reco.zip",
+     "method": "GET" 
+  }
+}
+
+###
+POST http://localhost:8083/cc616330-6906-4dd4-bcac-0fc145233d92/mmodelshare/v1/ess/events
+
+{
+  "id":"img_reco.zip",
+  "type":"ml_model",
+  "version":"1.0.0",
+  "dataOriginLink":{
+    "url":"http://192.168.4.27:8083/cc616330-6906-4dd4-bcac-0fc145233d92/mess/v1/objects/ml_model/img_reco.zip",
+    "method":"GET"
+  },
+  "dataDestinationLink":{
+    "url":"http://localhost:8083/cc616330-6906-4dd4-bcac-0fc145233d92/mess/v1/objects/img_reco.zip/ml_model/data",
+    "method":"PUT",
+    "formData":{"file":"--file-data-from-origin-link--"}
+  }
+}

@@ -61,7 +61,7 @@ function makeFileModel(context) {
     const defaultExisting = storage.getItem(id);
     if (defaultExisting) {
       const existing = JSON.parse(defaultExisting);
-      if (existing.version === defaultNew.version) {
+      if (existing.version <= defaultNew.version) {
         return existing;
       }
 
@@ -89,12 +89,28 @@ function makeFileModel(context) {
     return db;
   }
 
+  function updateDefault(id, name, version, dataOriginLink) {
+    const metadata = {
+      id: 'default',
+      name: 'default',
+      version,
+      originUrl: dataOriginLink.url,
+      mimeType: 'application/octet-stream',
+      createTime: new Date(Date.now()).toISOString(),
+      kind: 'drive#file',
+    };
+
+    const json = JSON.stringify(metadata);
+    storage.setItemWithTag(metadata.id, json, FILE_TAG);
+  }
+
   return {
     validate,
     insert,
     findById,
     getAll,
     deleteById,
+    updateDefault,
   };
 }
 

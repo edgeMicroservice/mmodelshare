@@ -1,6 +1,6 @@
 {
   "name": "mmodelshare",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -24,14 +24,14 @@
     "@babel/core": "^7.7.0",
     "@babel/preset-env": "^7.6.3",
     "@mimik/edge-ms-packager": "^1.0.2",
-    "@mimik/swagger-mw-codegen": "bitbucket:mimiktech/swagger-mw-codegen#f4f6f47",
+    "@mimik/swagger-mw-codegen": "bitbucket:mimiktech/swagger-mw-codegen#659e834",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-loader": "^3.0.2",
     "eslint-plugin-import": "^2.18.2",
-    "swagger-mmodelshare": "bitbucket:mimiktech/swagger-mmodelshare#2ba003b",
+    "swagger-mmodelshare": "bitbucket:mimiktech/swagger-mmodelshare#4fb410f",
     "terser-webpack-plugin": "^2.2.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9"

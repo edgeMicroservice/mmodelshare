@@ -62,11 +62,24 @@ function makeFileProcessor(context) {
     });
   }
 
+  function handleEssEvent(newEvent) {
+    return new Action((cb) => {
+      console.log(`**** kick: ${JSON.stringify(newEvent, null, 2)}`);
+
+      const {
+        id, type: name, version, dataOriginLink,
+      } = newEvent;
+
+      cb(fileModel.updateDefault(id, name, version, dataOriginLink));
+    });
+  }
+
   return {
     getFile,
     getFiles,
     createFile,
     deleteFile,
+    handleEssEvent,
   };
 }
 
