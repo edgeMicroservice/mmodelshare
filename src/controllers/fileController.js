@@ -1,5 +1,4 @@
 const response = require('@mimik/edge-ms-helper/response-helper');
-const { extractToken } = require('@mimik/edge-ms-helper/authorization-helper');
 const makeFileProcessor = require('../processors/fileProcessor');
 
 function getModel(req, res) {
@@ -27,13 +26,7 @@ function getModels(req, res) {
 }
 
 function createModel(req, res) {
-  const { context, authorization } = req;
-  const authKey = context.env.AUTHORIZATION_KEY;
-
-  if (extractToken(authorization) !== authKey) {
-    response.sendError(new Error('Incorrect authorization key'), 403, res);
-    return;
-  }
+  const { context } = req;
   let metadata;
   const fileData = {};
 
@@ -66,19 +59,23 @@ function createModel(req, res) {
 }
 
 function deleteModel(req, res) {
-  const { context, authorization, swagger } = req;
+  const { context, swagger } = req;
   const { id } = swagger.params;
-  const authKey = context.env.AUTHORIZATION_KEY;
-
-  if (extractToken(authorization) !== authKey) {
-    response.sendError(new Error('Incorrect authorization key'), 403, res);
-    return;
-  }
-
   makeFileProcessor(context)
     .deleteFile(id)
     .next(file => response.sendResult(file, 200, res))
     .guard(err => response.sendError(err, 400, res))
+    .go();
+}
+
+function handleEssEvent(req, res) {
+  const { newEvent } = req.swagger.params;
+  const { context } = req;
+
+  return makeFileProcessor(context)
+    .handleEssEvent(newEvent)
+    .next((createdItem => response.sendResult(createdItem, 200, res)))
+    .guard(err => response.sendError(err, res))
     .go();
 }
 
@@ -87,4 +84,5 @@ module.exports = {
   getModels,
   createModel,
   deleteModel,
+  handleEssEvent,
 };

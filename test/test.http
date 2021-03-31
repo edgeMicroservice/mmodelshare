@@ -1,0 +1,148 @@
+@host = http://localhost:8083
+
+## @clientId = d452dec6-0677-40bb-82fa-c24a59f976ff
+@clientId = cc616330-6906-4dd4-bcac-0fc145233d92
+
+@apiKey = 1234
+
+###
+POST {{host}}/mcm/v1/images
+Content-Type: multipart/form-data; boundary=$Boundary$
+Authorization: Bearer {{edgeToken}}
+
+--$Boundary$
+Content-Disposition: form-data; name="image"; filename="mmodelshare-v1.tar"
+
+< ../deploy/mmodelshare-v1.tar
+--$Boundary$
+
+###
+POST {{host}}/mcm/v1/containers
+Content-Type: application/json
+Authorization: Bearer {{edgeToken}}
+
+{
+  "env": {
+    "MCM.BASE_API_PATH": "/mmodelshare/v1",
+    "MCM.WEBSOCKET_SUPPORT": "true",
+    "API_KEY": "1234",
+    "WEBHOOK_API_KEY": "1234",
+    "WEBHOOK_URL": "http://localhost:8083/d452dec6-0677-40bb-82fa-c24a59f976ff/tms/v1/webhook/events"
+  },
+  "image": "mmodelshare-v1",
+  "name": "mmodelshare-v1"
+}
+
+###
+POST {{host}}/mcm/v1/containers
+Content-Type: application/json
+Authorization: Bearer {{edgeToken}}
+
+{
+  "env": {
+    "API_KEY": "1234",
+    "MCM.BASE_API_PATH": "/mmodelshare/v1",
+    "MCM.WEBSOCKET_SUPPORT": "false",
+    "MODEL_URL": "{{host}}/cc616330-6906-4dd4-bcac-0fc145233d92/mcdn/v1/dl/ml_model/mobilenet.zip",
+    "MODEL_VERSION": "1.0.0",
+    "MAX_EVENT_COUNT": "5"
+  },
+  "image": "mmodelshare-v1",
+  "name": "mmodelshare-v1"
+}
+
+###
+DELETE {{host}}/mcm/v1/containers/{{clientId}}-mmodelshare-v1
+Content-Type: application/json
+Authorization: Bearer {{edgeToken}}
+
+###
+GET {{host}}/mcm/v1/containers
+Content-Type: application/json
+Authorization: Bearer {{edgeToken}}
+
+###
+POST {{host}}/{{clientId}}/mmodelshare/v1/models
+Content-Type: multipart/form-data; boundary=$Boundary$
+x-api-key: {{apiKey}}
+
+--$Boundary$
+Content-Disposition: form-data; name="file"; filename="default"
+
+< ../deploy/mmodelshare-v1.tar
+--$Boundary$
+Content-Disposition: form-data; name="metadata";
+
+{
+  "name": "default",
+  "version": "mobilenet-1.0.0",
+  "description": "microservices",
+  "mimeType":"application/tar"
+}
+--$Boundary$--
+
+####
+GET {{host}}/{{clientId}}/mmodelshare/v1/models/default
+
+###
+GET {{host}}/{{clientId}}/mmodelshare/v1/models
+
+###
+DELETE {{host}}/{{clientId}}/mmodelshare/v1/models/default
+x-api-key: {{apiKey}}
+
+###
+POST {{host}}/{{clientId}}/modelshare/v1/classificationEvents
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "modelId": "mmodelshare-v1.tar",
+  "score": 0,
+  "classification": "motion",
+  "extras": [
+    {
+      "id": "c66a770c-6a35-11eb-9439-0242ac130002",
+      "path": "/home/zhi/Downloads/180626_17_MyeongdongSunrise_02.mp4",
+      "mimeType": "video/mp4"
+    }
+  ]
+}
+
+###
+GET {{host}}/{{clientId}}/mmodelshare/v1/classificationEvents
+Content-Type: application/json
+
+
+###
+POST {{host}}/{{clientId}}/mmodelshare/v1/ess/events
+Content-Type: application/json
+
+{
+  "id": "img_reco.zip",
+  "type": "ml_model",
+  "dataOriginLink":
+   { "url":
+      "http://192.168.4.27:8083/cc616330-6906-4dd4-bcac-0fc145233d92/mess/v1/objects/ml_model/img_reco.zip",
+     "method": "GET" 
+  }
+}
+
+###
+POST http://localhost:8083/cc616330-6906-4dd4-bcac-0fc145233d92/mmodelshare/v1/ess/events
+Content-Type: application/json
+
+{
+  "id":"img_reco.zip",
+  "type":"ml_model",
+  "version":"1.0.0",
+  "dataOriginLink":{
+    "url":"http://192.168.4.27:8083/cc616330-6906-4dd4-bcac-0fc145233d92/mess/v1/objects/ml_model/img_reco.zip",
+    "method":"GET"
+  },
+  "dataDestinationLink":{
+    "url":"http://localhost:8083/cc616330-6906-4dd4-bcac-0fc145233d92/mess/v1/objects/img_reco.zip/ml_model/data",
+    "method":"PUT",
+    "formData":{"file":"--file-data-from-origin-link--"}
+  }
+}

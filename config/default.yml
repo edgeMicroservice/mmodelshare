@@ -1,8 +1,9 @@
 name: mimik
 api:
   name: mmodelshare
-  swagger: swagger-mmodelshare/mmodelshare-api-swagger.yml
+  swagger: node_modules/swagger-mmodelshare/mmodelshare-api-swagger.yml
   controllerPath: ../src/controllers
+  securityHandlerPath: ../src/handlers
   outputPath: ./build
 package:
   imageName: mmodelshare

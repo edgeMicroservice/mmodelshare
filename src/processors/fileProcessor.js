@@ -2,8 +2,7 @@ const Action = require('action-js');
 const makeFileModel = require('../models/fileModel');
 
 function makeFileProcessor(context) {
-  const { storage } = context;
-  const fileModel = makeFileModel(storage);
+  const fileModel = makeFileModel(context);
 
   function getFile(fileId) {
     return new Action((cb) => {
@@ -32,6 +31,7 @@ function makeFileProcessor(context) {
         return;
       }
       const validMetadata = fileModel.validate(metadata, file.path);
+      console.log(validMetadata);
       if (!validMetadata) {
         cb(new Error('Invalid metadata'));
         return;
@@ -62,11 +62,26 @@ function makeFileProcessor(context) {
     });
   }
 
+  function handleEssEvent(newEvent) {
+    return new Action((cb) => {
+      // console.log(`**** kick: ${JSON.stringify(newEvent, null, 2)}`);
+
+      const {
+        id, type: name, version, dataOriginLink,
+      } = newEvent;
+
+      const metadata = fileModel.updateDefault(id, name, version, dataOriginLink);
+
+      cb(metadata);
+    });
+  }
+
   return {
     getFile,
     getFiles,
     createFile,
     deleteFile,
+    handleEssEvent,
   };
 }
 
