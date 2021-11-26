@@ -61,7 +61,7 @@ function makeFileModel(context) {
     const defaultExisting = storage.getItem(id);
     if (defaultExisting) {
       const existing = JSON.parse(defaultExisting);
-      if (existing.version <= defaultNew.version) {
+      if (existing.version >= defaultNew.version) {
         return existing;
       }
 
